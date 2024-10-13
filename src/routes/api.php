@@ -19,7 +19,7 @@ Route::post('/login', function (Request $request) {
     if (Auth::attempt($credentials)) {
         return response()->json([
             'message' => 'Login successful!',
-        ]);
+        ], 200);
     } else {
         return response()->json([
             'message' => 'Invalid login credentials!',
