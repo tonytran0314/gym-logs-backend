@@ -14,7 +14,10 @@ Route::get('/info', function () {
 })->middleware('auth:sanctum');
 
 Route::post('/login', function (Request $request) {
-    $credentials = $request->only('email', 'password');
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
 
     if (Auth::attempt($credentials)) {
         return response()->json([
