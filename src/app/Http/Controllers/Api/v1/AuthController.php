@@ -5,14 +5,12 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\v1\LoginRequest;
 
 class AuthController extends Controller
 {
-    public function login(Request $request) {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+    public function login(LoginRequest $request) {
+        $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
             return response()->json([
