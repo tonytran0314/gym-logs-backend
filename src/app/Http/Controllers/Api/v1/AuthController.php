@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\v1\LoginRequest;
+use App\Http\Requests\v1\SignupRequest;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -33,6 +35,23 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Successfully logged out!',
         ]);
+    }
+
+    public function signup(SignupRequest $request) {
+
+        $record = $request->all();
+
+        $newUser = User::create($record);
+
+        if($newUser) {
+            return response()->json([
+                'message' => 'User created successfully.',
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Failed to create user',
+        ], 500);
     }
 
     public function isAuthenticated() {
