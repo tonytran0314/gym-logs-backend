@@ -34,4 +34,16 @@ class AuthController extends Controller
             'message' => 'Successfully logged out!',
         ]);
     }
+
+    public function isAuthenticated() {
+        if (Auth::check()) {
+            return response()->json([
+                'isAuthenticated' => true,
+            ]); 
+        }
+
+        return response()->json([
+            'isAuthenticated' => false,
+        ]); 
+    }
 }

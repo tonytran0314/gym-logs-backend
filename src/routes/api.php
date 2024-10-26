@@ -17,5 +17,6 @@ Route::prefix('v1')->group(function() {
     Route::controller(AuthController::class)->group(function() {
         Route::post('/login', 'login');
         Route::post('/logout', 'logout');
+        Route::get('/is-authenticated', 'isAuthenticated');
     });
 });
