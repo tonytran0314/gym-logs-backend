@@ -27,6 +27,7 @@ Route::prefix('v1')->group(function() {
 
         Route::controller(ProfileController::class)->group(function() {
             Route::get('/profile', 'profile');
+            Route::put('/profile', 'editProfile');
         });
     });
 
