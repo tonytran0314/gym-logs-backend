@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class ExerciseController extends Controller
 {
@@ -22,6 +23,8 @@ class ExerciseController extends Controller
     }
 
     public function toggleWorkout() {
-        Auth::user()->isWorkingout = !Auth::user()->isWorkingout;
+        $user = User::find(Auth::user()->id);
+        $user->isWorkingout = !$user->isWorkingout;
+        $user->save();
     }
 }
