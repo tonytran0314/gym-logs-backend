@@ -22,9 +22,15 @@ class ExerciseController extends Controller
         ]); 
     }
 
-    public function toggleWorkout() {
+    public function startWorkout() {
         $user = User::find(Auth::user()->id);
-        $user->isWorkingout = !$user->isWorkingout;
+        $user->isWorkingout = true;
+        $user->save();
+    }
+
+    public function stopWorkout() {
+        $user = User::find(Auth::user()->id);
+        $user->isWorkingout = false;
         $user->save();
     }
 }
