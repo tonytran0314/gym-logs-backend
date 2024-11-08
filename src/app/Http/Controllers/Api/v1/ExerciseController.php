@@ -20,4 +20,8 @@ class ExerciseController extends Controller
             'isWorkingout' => false,
         ]); 
     }
+
+    public function toggleWorkout() {
+        Auth::user()->isWorkingout = !Auth::user()->isWorkingout;
+    }
 }

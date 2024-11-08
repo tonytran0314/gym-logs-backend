@@ -19,6 +19,7 @@ Route::prefix('v1')->group(function() {
         
         Route::controller(ExerciseController::class)->group(function() {
             Route::get('/is-workingout', 'isWorkingout');
+            Route::put('/toggle-workout', 'toggleWorkout');
         });
     });
 
