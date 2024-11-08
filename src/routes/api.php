@@ -21,6 +21,7 @@ Route::prefix('v1')->group(function() {
             Route::get('/is-workingout', 'isWorkingout');
             Route::put('/start-workout', 'startWorkout');
             Route::put('/stop-workout', 'stopWorkout');
+            Route::post('/save-set', 'saveSet');
         });
     });
 
