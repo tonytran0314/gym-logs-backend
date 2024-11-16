@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\v1\ExerciseController;
 use App\Http\Controllers\Api\v1\ProfileController;
+use App\Http\Controllers\Api\v1\ChartController;
 
 Route::prefix('v1')->group(function() {
     Route::middleware('auth:sanctum')->group(function() {
@@ -28,6 +29,10 @@ Route::prefix('v1')->group(function() {
         Route::controller(ProfileController::class)->group(function() {
             Route::get('/profile', 'profile');
             Route::put('/profile', 'editProfile');
+        });
+
+        Route::controller(ChartController::class)->prefix('chart')->group(function() {
+            Route::get('/weight-level/{selectedExercise?}', 'weightLevel');
         });
     });
 
