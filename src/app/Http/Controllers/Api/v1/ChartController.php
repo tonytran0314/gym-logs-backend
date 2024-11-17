@@ -10,10 +10,16 @@ use Carbon\Carbon;
 
 class ChartController extends Controller
 {
-    public function weightLevel($selectedExercise = null) {
+    public function weightLevel($selectedExercise = null, $months = 1) {
         $userID = Auth::user()->id;
 
-        $records = ExerciseRecords::where('user_id', $userID)->get();
+        // Xác định ngày bắt đầu (tính từ hôm nay trừ đi số tháng)
+        $startDate = Carbon::now()->subMonths($months)->startOfDay();
+
+        // Lọc các bản ghi theo user_id và created_at trong khoảng thời gian đã chọn
+        $records = ExerciseRecords::where('user_id', $userID)
+                    ->where('created_at', '>=', $startDate)
+                    ->get();
 
         // Nhóm các bài tập theo tên và ngày tập luyện (loại bỏ giờ phút)
         $exerciseDays = $records->groupBy(function ($record) {
@@ -40,6 +46,7 @@ class ChartController extends Controller
             ]);
         }
 
+        // Xác định bài tập phổ biến nhất
         $mostCommonExercise = collect($records)
                                 ->pluck('exercise')
                                 ->countBy()
@@ -50,7 +57,7 @@ class ChartController extends Controller
         $exercise = $selectedExercise ?? $mostCommonExercise;
 
         if (!in_array($exercise, $exercises)) {
-            $exercise = $exercises[0]; // chọn exercise đầu tiên nếu exercise phổ biến nhất không đủ điều kiện
+            $exercise = $exercises[0]; // Chọn exercise đầu tiên nếu exercise phổ biến nhất không đủ điều kiện
         }
 
         $data = $records->where('exercise', $exercise);
@@ -80,6 +87,12 @@ class ChartController extends Controller
             'dates' => $dates,
             'weight_levels' => $weightLevels,
             'exercises' => $exercises,
+            'exercise' => $exercise,
+            'periods' => [
+                ['label' => '1 month', 'value' => 1],
+                ['label' => '2 months', 'value' => 2],
+                ['label' => '3 months', 'value' => 3],
+            ]
         ]);
 
     }
