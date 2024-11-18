@@ -33,6 +33,7 @@ Route::prefix('v1')->group(function() {
 
         Route::controller(ChartController::class)->prefix('chart')->group(function() {
             Route::get('/weight-level/{selectedExercise?}/{months?}', 'weightLevel');
+            Route::get('/muscle-proportions', 'muscleProportions');
         });
     });
 

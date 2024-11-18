@@ -7,6 +7,7 @@ use App\Models\ExerciseRecords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ChartController extends Controller
 {
@@ -95,5 +96,24 @@ class ChartController extends Controller
             ]
         ]);
 
+    }
+
+    public function muscleProportions() {
+
+        $userID = Auth::user()->id;
+        $muscleGroups = ExerciseRecords::select('muscle', DB::raw('count(*) as count'))
+                                ->where('user_id', $userID)
+                                ->groupBy('muscle')
+                                ->orderByDesc('count')
+                                ->limit(5)
+                                ->get();
+
+        $muscleNames = $muscleGroups->pluck('muscle');
+        $counts = $muscleGroups->pluck('count');
+        
+        return response()->json([
+            'muscle_groups' => $muscleNames,
+            'counts' => $counts,
+        ]);
     }
 }
