@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\v1\ExerciseController;
 use App\Http\Controllers\Api\v1\ProfileController;
 use App\Http\Controllers\Api\v1\ChartController;
+use App\Http\Controllers\Api\v1\ArchivementController;
 
 Route::prefix('v1')->group(function() {
     Route::middleware('auth:sanctum')->group(function() {
@@ -34,6 +35,13 @@ Route::prefix('v1')->group(function() {
         Route::controller(ChartController::class)->prefix('chart')->group(function() {
             Route::get('/weight-level/{selectedExercise?}/{months?}', 'weightLevel');
             Route::get('/muscle-proportions', 'muscleProportions');
+        });
+        
+        Route::controller(ArchivementController::class)->prefix('archivement')->group(function() {
+            Route::get('/streak', 'getStreak');
+            Route::get('/workout-days', 'getWorkoutDays');
+            Route::get('/popular-exercise-comparison', 'getMostPopularExerciseComparison');
+            Route::get('/total-exercise-this-week', 'getTotalExerciseThisWeek');
         });
     });
 
