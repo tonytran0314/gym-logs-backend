@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\v1\ExerciseController;
 use App\Http\Controllers\Api\v1\ProfileController;
 use App\Http\Controllers\Api\v1\ChartController;
 use App\Http\Controllers\Api\v1\ArchivementController;
+use App\Http\Controllers\Api\v1\HistoryController;
 
 Route::prefix('v1')->group(function() {
     Route::middleware('auth:sanctum')->group(function() {
@@ -42,6 +43,10 @@ Route::prefix('v1')->group(function() {
             Route::get('/workout-days', 'getWorkoutDays');
             Route::get('/popular-exercise-comparison', 'getMostPopularExerciseComparison');
             Route::get('/total-exercise-this-week', 'getTotalExerciseThisWeek');
+        });
+
+        Route::controller(HistoryController::class)->group(function() {
+            Route::get('/history', 'getHistoryRecords');
         });
     });
 
