@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Muscle;
 use App\Models\WorkoutStatus;
+use App\Models\Exercise;
 use Carbon\Carbon;
 
 class ExerciseController extends Controller
@@ -22,6 +23,26 @@ class ExerciseController extends Controller
         $muscleID = $request->query('muscle_id');
         $exercises = Muscle::find($muscleID)->exercises()->get();
         return response()->json($exercises);
+    }
+
+    public function getCurrentExercise(Request $request) {
+        $today = Carbon::today();
+        $userID = Auth::user()->id;
+        $exerciseID = $request->query('exercise_id');
+        $exerciseName = Exercise::find($exerciseID)->name;
+
+        // Lấy bản ghi có set_number lớn nhất
+        $maxSetNumber = ExerciseRecords::where('user_id', $userID)
+            ->where('exercise_id', $exerciseID)
+            ->whereDate('created_at', $today)
+            ->max('set_number'); // Lấy giá trị set_number lớn nhất
+
+        $setNumber = $maxSetNumber ? $maxSetNumber + 1 : 1; // Nếu có bản ghi, tăng set_number, nếu không, bắt đầu từ 1
+
+        return response()->json([
+            'name' => $exerciseName,
+            'set' => $setNumber,
+        ]);
     }
 
     public function isWorkingout() {

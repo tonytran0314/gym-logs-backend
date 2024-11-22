@@ -24,6 +24,7 @@ Route::prefix('v1')->group(function() {
         Route::controller(ExerciseController::class)->group(function() {
             Route::get('/muscles', 'getMuscles');
             Route::get('/exercises', 'getExercises');
+            Route::get('/current-exercise', 'getCurrentExercise');
             Route::get('/is-workingout', 'isWorkingout');
             Route::put('/start-workout', 'startWorkout');
             Route::put('/stop-workout', 'stopWorkout');
