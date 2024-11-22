@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('exercise_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->string('muscle');
-            $table->string('exercise');
+            $table->foreignId('muscle_id')->constrained();
+            $table->foreignId('exercise_id')->constrained();
             $table->float('weight_level');
             $table->integer('reps');
             $table->integer('set_number');

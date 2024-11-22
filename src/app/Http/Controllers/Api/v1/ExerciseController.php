@@ -7,10 +7,22 @@ use App\Models\ExerciseRecords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Muscle;
 use Carbon\Carbon;
 
 class ExerciseController extends Controller
 {
+    public function getMuscles() {
+        $muscles = Muscle::get();
+        return response()->json($muscles);
+    }
+    
+    public function getExercises(Request $request) {
+        $muscleID = $request->query('muscle_id');
+        $exercises = Muscle::find($muscleID)->exercises()->get();
+        return response()->json($exercises);
+    }
+
     public function isWorkingout() {
         
         if (Auth::user()->isWorkingout) {
@@ -48,7 +60,7 @@ class ExerciseController extends Controller
         // If cannot find the prev set, means this is the first set => set number = 1
         $previousSets = ExerciseRecords::where([
                                                 ['user_id', $userID],
-                                                ['exercise', $set['exercise']]
+                                                ['exercise_id', $set['exercise_id']]
                                             ])
                                             ->whereDate('created_at', Carbon::today())
                                             ->get();

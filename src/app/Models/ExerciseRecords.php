@@ -13,15 +13,14 @@ class ExerciseRecords extends Model
 
     protected $fillable = [
         'user_id',
-        'muscle',
-        'exercise',
+        'muscle_id',
+        'exercise_id',
         'weight_level',
         'reps',
         'set_number'
     ];
 
-    public function user(): BelongsTo
-    {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
 }
