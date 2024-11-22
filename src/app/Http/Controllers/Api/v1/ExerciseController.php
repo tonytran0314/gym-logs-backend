@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Muscle;
+use App\Models\WorkoutStatus;
 use Carbon\Carbon;
 
 class ExerciseController extends Controller
@@ -24,8 +25,9 @@ class ExerciseController extends Controller
     }
 
     public function isWorkingout() {
-        
-        if (Auth::user()->isWorkingout) {
+        $userID = Auth::user()->id;
+        $status = WorkoutStatus::where('user_id', $userID)->get();
+        if ($status->isNotEmpty()) {
             return response()->json([
                 'isWorkingout' => true,
             ]); 
@@ -37,15 +39,17 @@ class ExerciseController extends Controller
     }
 
     public function startWorkout() {
-        $user = User::find(Auth::user()->id);
-        $user->isWorkingout = true;
-        $user->save();
+        $userID = Auth::user()->id;
+        $status = WorkoutStatus::create([
+            'user_id' => $userID
+        ]);
+        $status->save();
     }
 
     public function stopWorkout() {
-        $user = User::find(Auth::user()->id);
-        $user->isWorkingout = false;
-        $user->save();
+        $userID = Auth::user()->id;
+        $status = WorkoutStatus::where('user_id', $userID);
+        $status->delete();
     }
 
     public function saveSet(Request $request) {

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\ExerciseRecords;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -50,5 +51,10 @@ class User extends Authenticatable
     public function exerciseRecords(): HasMany
     {
         return $this->hasMany(ExerciseRecords::class);
+    }
+
+    public function workoutStatus(): HasOne
+    {
+        return $this->HasOne(WorkoutStatus::class);
     }
 }
