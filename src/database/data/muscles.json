@@ -1,66 +1,42 @@
 [
     {
-        "name": "abdominals",
-        "image": "images/biceps.jpg"
-    },
-    {
-        "name": "abductors",
-        "image": "images/biceps.jpg"
-    },
-    {
-        "name": "adductors",
-        "image": "images/biceps.jpg"
+        "name": "abs",
+        "image": "images/muscles/abs.svg"
     },
     {
         "name": "biceps",
-        "image": "images/biceps.jpg"
-    },
-    {
-        "name": "calves",
-        "image": "images/biceps.jpg"
+        "image": "images/muscles/biceps.svg"
     },
     {
         "name": "chest",
-        "image": "images/biceps.jpg"
+        "image": "images/muscles/chest.svg"
     },
     {
         "name": "forearms",
-        "image": "images/biceps.jpg"
+        "image": "images/muscles/forearms.svg"
     },
     {
         "name": "glutes",
-        "image": "images/biceps.jpg"
+        "image": "images/muscles/glutes.svg"
     },
     {
         "name": "hamstrings",
-        "image": "images/biceps.jpg"
+        "image": "images/muscles/hamstrings.svg"
     },
     {
         "name": "lats",
-        "image": "images/biceps.jpg"
-    },
-    {
-        "name": "lower_back",
-        "image": "images/biceps.jpg"
-    },
-    {
-        "name": "middle_back",
-        "image": "images/biceps.jpg"
-    },
-    {
-        "name": "neck",
-        "image": "images/biceps.jpg"
+        "image": "images/muscles/lats.svg"
     },
     {
         "name": "quadriceps",
-        "image": "images/biceps.jpg"
+        "image": "images/muscles/quadriceps.svg"
     },
     {
-        "name": "traps",
-        "image": "images/biceps.jpg"
+        "name": "shoulders",
+        "image": "images/muscles/shoulders.svg"
     },
     {
         "name": "triceps",
-        "image": "images/biceps.jpg"
+        "image": "images/muscles/triceps.svg"
     }
 ]

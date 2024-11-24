@@ -1,0 +1,21 @@
+[
+    {
+        "name": "Overhead Press",
+        "muscle_id": 9,
+        "image": "images/biceps.jpg",
+        "instructions": "Stand with your feet shoulder-width apart, holding dumbbells, a barbell, or resistance bands. Start with the weights at shoulder height, palms facing forward. Push the weights upward until your arms are fully extended above your head. Pause briefly, then lower the weights back to the starting position, keeping control throughout the movement."
+    },
+    {
+        "name": "Lateral Raises",
+        "muscle_id": 9,
+        "image": "images/biceps.jpg",
+        "instructions": "Hold a dumbbell in each hand by your sides with your palms facing inward. With a slight bend in your elbows, lift your arms out to the sides until they reach shoulder height, forming a “T” shape. Slowly lower the dumbbells back to the starting position. Avoid using momentum and focus on engaging your shoulder muscles."
+    },
+    {
+        "name": "Front Raises",
+        "muscle_id": 9,
+        "image": "images/biceps.jpg",
+        "instructions": "Start with a dumbbell in each hand, arms resting in front of your thighs with palms facing your body. Keeping your arms straight, lift one or both dumbbells in front of you until they’re at shoulder height. Lower them back down slowly, keeping tension on your shoulder muscles throughout the movement."
+    }
+]
+  
