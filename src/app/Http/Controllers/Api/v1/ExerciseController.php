@@ -11,12 +11,20 @@ use App\Models\Muscle;
 use App\Models\WorkoutStatus;
 use App\Models\Exercise;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 class ExerciseController extends Controller
 {
     public function getMuscles() {
-        $muscles = Muscle::get();
-        return response()->json($muscles);
+        $muscles = Muscle::all();
+        $muscleData = [];
+        foreach($muscles as $muscle) {
+            $muscleData[] = [
+                'name' => $muscle->name,
+                'image' => $muscle->image
+            ];
+        }
+        return response()->json($muscleData);
     }
     
     public function getExercises(Request $request) {

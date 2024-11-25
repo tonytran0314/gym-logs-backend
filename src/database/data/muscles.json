@@ -1,42 +1,42 @@
 [
     {
         "name": "abs",
-        "image": "images/muscles/abs.svg"
+        "image": "images/muscles/abs.png"
     },
     {
         "name": "biceps",
-        "image": "images/muscles/biceps.svg"
+        "image": "images/muscles/biceps.png"
     },
     {
         "name": "chest",
-        "image": "images/muscles/chest.svg"
+        "image": "images/muscles/chest.png"
     },
     {
         "name": "forearms",
-        "image": "images/muscles/forearms.svg"
+        "image": "images/muscles/forearms.png"
     },
     {
         "name": "glutes",
-        "image": "images/muscles/glutes.svg"
+        "image": "images/muscles/glutes.png"
     },
     {
         "name": "hamstrings",
-        "image": "images/muscles/hamstrings.svg"
+        "image": "images/muscles/hamstrings.png"
     },
     {
         "name": "lats",
-        "image": "images/muscles/lats.svg"
+        "image": "images/muscles/lats.png"
     },
     {
         "name": "quadriceps",
-        "image": "images/muscles/quadriceps.svg"
+        "image": "images/muscles/quadriceps.png"
     },
     {
         "name": "shoulders",
-        "image": "images/muscles/shoulders.svg"
+        "image": "images/muscles/shoulders.png"
     },
     {
         "name": "triceps",
-        "image": "images/muscles/triceps.svg"
+        "image": "images/muscles/triceps.png"
     }
 ]
