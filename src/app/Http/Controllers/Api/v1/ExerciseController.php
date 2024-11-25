@@ -17,14 +17,7 @@ class ExerciseController extends Controller
 {
     public function getMuscles() {
         $muscles = Muscle::all();
-        $muscleData = [];
-        foreach($muscles as $muscle) {
-            $muscleData[] = [
-                'name' => $muscle->name,
-                'image' => $muscle->image
-            ];
-        }
-        return response()->json($muscleData);
+        return response()->json($muscles);
     }
     
     public function getExercises(Request $request) {

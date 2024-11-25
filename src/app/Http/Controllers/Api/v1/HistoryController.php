@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ExerciseRecords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Exercise;
+use App\Models\Muscle;
 
 class HistoryController extends Controller
 {
@@ -15,15 +17,15 @@ class HistoryController extends Controller
 
         // Nhóm dữ liệu theo ngày
         $groupedRecords = $records->groupBy(function ($item) {
-            return $item->created_at->format('M d, Y');  // Định dạng ngày thành Nov 20, 2024
+            return $item->created_at->format('D, M d');  // Định dạng ngày thành Nov 20, 2024
         });
 
         // Biến đổi dữ liệu thành cấu trúc phù hợp với yêu cầu
         $workouts = $groupedRecords->map(function ($workoutRecords, $date) {
-            $exercises = $workoutRecords->groupBy('exercise')->map(function ($exerciseRecords, $exerciseName) {
+            $exercises = $workoutRecords->groupBy('exercise_id')->map(function ($exerciseRecords) {
                 return [
-                    'name' => $exerciseName,
-                    'muscle' => $exerciseRecords->first()->muscle,
+                    'name' => Exercise::find($exerciseRecords->first()->exercise_id)->name,
+                    'muscle' => Muscle::find($exerciseRecords->first()->muscle_id)->name,
                     'sets' => $exerciseRecords->map(function ($record) {
                         return [
                             'set_number' => $record->set_number,
@@ -34,12 +36,12 @@ class HistoryController extends Controller
                 ];
             });
 
-            // Tính tổng số sets cho ngày đó
-            $totalSets = $workoutRecords->count();
-
             return [
-                'date' => $date,  // Ngày đã được định dạng
-                'total_sets' => $totalSets,  // Tổng số sets trong ngày
+                'time' => [
+                    'day' => $workoutRecords->first()->created_at->format('D'),
+                    'date' => $workoutRecords->first()->created_at->format('M d'),
+                    'year' => $workoutRecords->first()->created_at->format('Y')
+                ],
                 'exercises' => $exercises->values(),
             ];
         });
