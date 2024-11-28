@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExerciseRecords;
+use App\Models\Exercise;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -75,8 +76,8 @@ class ArchivementController extends Controller
         $userID = Auth::user()->id;
         // Bước 1: Lấy bài tập phổ biến nhất (tính số lần xuất hiện của từng bài tập)
         $mostPopularExercise = ExerciseRecords::where('user_id', $userID)
-            ->select('exercise')  // Sử dụng 'exercise' thay cho 'name'
-            ->groupBy('exercise')  // Nhóm theo 'exercise'
+            ->select('exercise_id')
+            ->groupBy('exercise_id')  // Nhóm theo 'exercise'
             ->selectRaw('count(*) as exercise_count')  // Đếm số lần xuất hiện của mỗi bài tập
             ->orderByDesc('exercise_count')  // Sắp xếp theo số lần xuất hiện, giảm dần
             ->first(); // Lấy bài tập phổ biến nhất
@@ -88,11 +89,11 @@ class ArchivementController extends Controller
             ]);
         }
 
-        $exerciseName = $mostPopularExercise->exercise;
+        $exerciseName = Exercise::find($mostPopularExercise->exercise_id)->name;
 
         // Bước 2: Lấy hai ngày tập luyện gần nhất của bài tập phổ biến
         $dates = ExerciseRecords::where('user_id', $userID)
-            ->where('exercise', $exerciseName)  // Sử dụng 'exercise' để lọc bài tập
+            ->where('exercise_id', $mostPopularExercise->exercise_id)  // Sử dụng 'exercise' để lọc bài tập
             ->select('created_at', 'reps', 'weight_level')
             ->orderByDesc('created_at')
             ->limit(2)
@@ -151,7 +152,7 @@ class ArchivementController extends Controller
         // Truy vấn các bài tập thực hiện trong tuần này của người dùng
         $totalExercises = ExerciseRecords::where('user_id', $userID)
             ->whereBetween('created_at', [$startOfWeek, $endOfWeek]) // Lọc theo ngày trong tuần này
-            ->distinct('exercise')
+            ->distinct('exercise_id')
             ->count(); // Đếm tổng số bài tập
 
         // Trả về tổng số bài tập

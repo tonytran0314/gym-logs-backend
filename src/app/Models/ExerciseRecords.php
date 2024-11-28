@@ -23,4 +23,8 @@ class ExerciseRecords extends Model
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
+
+    public function exercise(): BelongsTo {
+        return $this->belongsTo(Exercise::class, 'exercise_id');
+    }
 }
