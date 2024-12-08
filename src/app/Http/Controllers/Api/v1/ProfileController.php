@@ -7,11 +7,15 @@ use App\Http\Requests\v1\UpdateProfileRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Http\Resources\v1\UserResource;
+use App\Traits\HttpResponses;
 
 class ProfileController extends Controller
 {
+    use HttpResponses;
+
     public function profile() {
-        return Auth::user();
+        return $this->success(new UserResource(Auth::user()), null);
     }
 
     public function editProfile(UpdateProfileRequest $request) {
@@ -19,9 +23,7 @@ class ProfileController extends Controller
         $userID = Auth::user()->id;
         $user = User::find($userID);
         if(!$user) {
-            return response()->json([
-                'message' => 'User Not Found'
-            ], 404);
+            return $this->error(null, 'User Not Found', 404);
         }
 
 
@@ -30,15 +32,11 @@ class ProfileController extends Controller
             'email' => $request->email
         ]);
         if(!$updated) {
-            return response()->json([
-                'message' => 'Failed to Update Profile'
-            ], 500);
+            return $this->error(null, 'Failed to Update Profile', 500);
         }
         
 
-        return response()->json([
-            'message' => 'Updated Profile Successfully'
-        ], 200);
+        return $this->success($request, 'Updated Profile Successfully', 200);
         
     }
 }
