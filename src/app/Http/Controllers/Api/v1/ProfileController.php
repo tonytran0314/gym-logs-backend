@@ -36,7 +36,7 @@ class ProfileController extends Controller
         }
         
 
-        return $this->success($request, 'Updated Profile Successfully', 200);
+        return $this->success(new UserResource($user), 'Updated Profile Successfully', 200);
         
     }
 }
