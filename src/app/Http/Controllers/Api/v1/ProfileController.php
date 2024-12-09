@@ -14,12 +14,11 @@ class ProfileController extends Controller
 {
     use HttpResponses;
 
-    public function profile() {
+    public function show() {
         return $this->success(new UserResource(Auth::user()), null);
     }
 
-    public function editProfile(UpdateProfileRequest $request) {
-
+    public function update(UpdateProfileRequest $request) {
         $userID = Auth::user()->id;
         $user = User::find($userID);
         if(!$user) {

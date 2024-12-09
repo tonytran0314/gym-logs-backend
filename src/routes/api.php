@@ -32,9 +32,10 @@ Route::prefix('v1')->group(function() {
         });
 
         Route::controller(ProfileController::class)->group(function() {
-            Route::get('/profile', 'profile');
-            Route::put('/profile', 'editProfile');
+            Route::get('/profile', 'show');
+            Route::put('/profile', 'update');
         });
+        // Route::apiResource('/profile', ProfileController::class)->only(['show', 'update']);
 
         Route::controller(ChartController::class)->prefix('chart')->group(function() {
             Route::get('/weight-level/{selectedExercise?}/{months?}', 'weightLevel');
