@@ -49,9 +49,7 @@ Route::prefix('v1')->group(function() {
             Route::get('/total-exercise-this-week', 'getTotalExerciseThisWeek');
         });
 
-        Route::controller(HistoryController::class)->group(function() {
-            Route::get('/history', 'getHistoryRecords');
-        });
+        Route::apiResource('history', HistoryController::class)->only(['index']);
     });
 
     Route::controller(AuthController::class)->group(function() {

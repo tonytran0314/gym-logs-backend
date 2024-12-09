@@ -8,10 +8,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Exercise;
 use App\Models\Muscle;
+use App\Traits\HttpResponses;
 
 class HistoryController extends Controller
 {
-    public function getHistoryRecords() {
+
+    use HttpResponses;
+
+    // This should have pagination
+    public function index() {
         $userID = Auth::user()->id;
         $records = ExerciseRecords::where('user_id', $userID)->orderByDesc('created_at')->get();
 
@@ -46,6 +51,6 @@ class HistoryController extends Controller
             ];
         });
 
-        return response()->json($workouts->values());
+        return $this->success($workouts->values(), null);
     }
 }
