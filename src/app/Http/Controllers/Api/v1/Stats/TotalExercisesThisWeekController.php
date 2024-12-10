@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\Api\v1\Stats;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExerciseRecords;
-use App\Models\Exercise;
-use Illuminate\Http\Request;
+use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
-class ArchivementController extends Controller
+class TotalExercisesThisWeekController extends Controller
 {
-    public function getTotalExerciseThisWeek() {
+    use HttpResponses;
+
+    public function index() {
         $userID = Auth::user()->id;
         // Lấy ngày bắt đầu của tuần hiện tại (chủ nhật tuần trước)
         $startOfWeek = Carbon::now()->startOfWeek(); // Mặc định là chủ nhật tuần trước
@@ -25,8 +25,6 @@ class ArchivementController extends Controller
             ->count(); // Đếm tổng số bài tập
 
         // Trả về tổng số bài tập
-        return response()->json([
-            'totalExercises' => $totalExercises
-        ]);
+        return $this->success($totalExercises, null);
     }
 }

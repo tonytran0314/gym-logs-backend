@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\v1\ChartController;
 use App\Http\Controllers\Api\v1\ArchivementController;
 use App\Http\Controllers\Api\v1\HistoryController;
 use App\Http\Controllers\Api\v1\Stats\MostPopularExerciseAnalysisController;
+use App\Http\Controllers\Api\v1\Stats\TotalExercisesThisWeekController;
 use App\Http\Controllers\Api\v1\Stats\WorkoutDaysController;
 
 Route::prefix('v1')->group(function() {
@@ -49,11 +50,7 @@ Route::prefix('v1')->group(function() {
             Route::apiResource('/streak', StreakController::class)->only(['index']);
             Route::apiResource('/workout-days', WorkoutDaysController::class)->only(['index']);
             Route::apiResource('/most-popular-exercise-analysis', MostPopularExerciseAnalysisController::class)->only(['index']);
-        });
-
-        Route::controller(ArchivementController::class)->prefix('archivement')->group(function() {
-            Route::get('/popular-exercise-comparison', 'getMostPopularExerciseComparison');
-            Route::get('/total-exercise-this-week', 'getTotalExerciseThisWeek');
+            Route::apiResource('/total-exercise-this-week', TotalExercisesThisWeekController::class)->only(['index']);
         });
 
         Route::apiResource('history', HistoryController::class)->only(['index']);
