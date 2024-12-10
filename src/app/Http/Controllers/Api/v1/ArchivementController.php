@@ -12,26 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class ArchivementController extends Controller
 {
-    public function getWorkoutDays() {
-        $userID = Auth::user()->id;
-
-        $startOfMonth = Carbon::now()->startOfMonth(); // Ngày đầu tháng
-        $endOfMonth = Carbon::now()->endOfMonth(); // Ngày cuối tháng
-
-        $dates = ExerciseRecords::where('user_id', $userID)
-                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                ->selectRaw('DISTINCT DATE(created_at) as date') // Lọc ngày duy nhất
-                ->get()
-                ->pluck('created_at') // Lấy cột 'date' từ kết quả
-                ->map(fn($date) => Carbon::parse($date)) // Chuyển về đối tượng Carbon
-                ->toArray();
-
-        // Trả về tổng số ngày tập luyện trong tháng
-        return response()->json([
-            'workoutDays' => count($dates)
-        ]);
-    }
-
     public function getMostPopularExerciseComparison() {
         $userID = Auth::user()->id;
         // Bước 1: Lấy bài tập phổ biến nhất (tính số lần xuất hiện của từng bài tập)
