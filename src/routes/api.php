@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\Stats\StreakController;
 use App\Http\Controllers\Api\v1\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,8 +43,9 @@ Route::prefix('v1')->group(function() {
             Route::get('/muscle-proportions', 'muscleProportions');
         });
         
+        Route::apiResource('/streak', StreakController::class)->only(['index']);
+
         Route::controller(ArchivementController::class)->prefix('archivement')->group(function() {
-            Route::get('/streak', 'getStreak');
             Route::get('/workout-days', 'getWorkoutDays');
             Route::get('/popular-exercise-comparison', 'getMostPopularExerciseComparison');
             Route::get('/total-exercise-this-week', 'getTotalExerciseThisWeek');
