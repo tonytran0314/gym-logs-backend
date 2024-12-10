@@ -122,24 +122,4 @@ class ChartController extends Controller
             ]
         ]);
     }
-
-    public function muscleProportions() {
-        $userID = Auth::user()->id;
-
-        $muscleGroups = ExerciseRecords::select('muscles.name as muscle_name', DB::raw('count(*) as count'))
-            ->join('muscles', 'exercise_records.muscle_id', '=', 'muscles.id')
-            ->where('exercise_records.user_id', $userID)
-            ->groupBy('exercise_records.muscle_id', 'muscles.name')
-            ->orderByDesc('count')
-            ->limit(5)
-            ->get();
-
-        $muscleNames = $muscleGroups->pluck('muscle_name');
-        $counts = $muscleGroups->pluck('count');
-        
-        return response()->json([
-            'muscle_groups' => $muscleNames,
-            'counts' => $counts,
-        ]);
-    }
 }
