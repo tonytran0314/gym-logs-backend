@@ -15,17 +15,6 @@ use Illuminate\Support\Facades\File;
 
 class ExerciseController extends Controller
 {
-    public function getMuscles() {
-        $muscles = Muscle::all();
-        return response()->json($muscles);
-    }
-    
-    public function getExercises(Request $request) {
-        $muscleID = $request->query('muscle_id');
-        $exercises = Muscle::find($muscleID)->exercises()->get();
-        return response()->json($exercises);
-    }
-
     public function getCurrentExercise(Request $request) {
         $today = Carbon::today();
         $userID = Auth::user()->id;
@@ -46,33 +35,33 @@ class ExerciseController extends Controller
         ]);
     }
 
-    public function isWorkingout() {
-        $userID = Auth::user()->id;
-        $status = WorkoutStatus::where('user_id', $userID)->get();
-        if ($status->isNotEmpty()) {
-            return response()->json([
-                'isWorkingout' => true,
-            ]); 
-        }
+    // public function isWorkingout() {
+    //     $userID = Auth::user()->id;
+    //     $status = WorkoutStatus::where('user_id', $userID)->get();
+    //     if ($status->isNotEmpty()) {
+    //         return response()->json([
+    //             'isWorkingout' => true,
+    //         ]); 
+    //     }
 
-        return response()->json([
-            'isWorkingout' => false,
-        ]); 
-    }
+    //     return response()->json([
+    //         'isWorkingout' => false,
+    //     ]); 
+    // }
 
-    public function startWorkout() {
-        $userID = Auth::user()->id;
-        $status = WorkoutStatus::create([
-            'user_id' => $userID
-        ]);
-        $status->save();
-    }
+    // public function startWorkout() {
+    //     $userID = Auth::user()->id;
+    //     $status = WorkoutStatus::create([
+    //         'user_id' => $userID
+    //     ]);
+    //     $status->save();
+    // }
 
-    public function stopWorkout() {
-        $userID = Auth::user()->id;
-        $status = WorkoutStatus::where('user_id', $userID);
-        $status->delete();
-    }
+    // public function stopWorkout() {
+    //     $userID = Auth::user()->id;
+    //     $status = WorkoutStatus::where('user_id', $userID);
+    //     $status->delete();
+    // }
 
     public function saveSet(Request $request) {
 

@@ -4,10 +4,11 @@ use App\Http\Controllers\Api\v1\Stats\StreakController;
 use App\Http\Controllers\Api\v1\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\v1\ExerciseController;
 use App\Http\Controllers\Api\v1\ProfileController;
 use App\Http\Controllers\Api\v1\Charts\MuscleProportionsController;
 use App\Http\Controllers\Api\v1\Charts\WeightLevelsController;
+use App\Http\Controllers\Api\v1\Exercise\ExerciseController;
+use App\Http\Controllers\Api\v1\Exercise\MuscleController;
 use App\Http\Controllers\Api\v1\HistoryController;
 use App\Http\Controllers\Api\v1\Stats\MostPopularExerciseAnalysisController;
 use App\Http\Controllers\Api\v1\Stats\TotalExercisesThisWeekController;
@@ -15,22 +16,19 @@ use App\Http\Controllers\Api\v1\Stats\WorkoutDaysController;
 
 Route::prefix('v1')->group(function() {
     Route::middleware('auth:sanctum')->group(function() {        
-        Route::controller(ExerciseController::class)->group(function() {
-            Route::get('/muscles', 'getMuscles');
-            Route::get('/exercises', 'getExercises');
-            Route::get('/current-exercise', 'getCurrentExercise');
-            Route::get('/is-workingout', 'isWorkingout');
-            Route::put('/start-workout', 'startWorkout');
-            Route::put('/stop-workout', 'stopWorkout');
-            Route::post('/save-set', 'saveSet');
-        });
+        // Route::controller(ExerciseController::class)->group(function() {
+        //     Route::get('/current-exercise', 'getCurrentExercise');
+        //     Route::post('/save-set', 'saveSet');
+        // });
+
+        Route::apiResource('/muscles', MuscleController::class)->only(['index']);
+        Route::apiResource('/exercises', ExerciseController::class)->only(['index']);
+        Route::apiResource('/history', HistoryController::class)->only(['index']);
 
         Route::controller(ProfileController::class)->group(function() {
             Route::get('/profile', 'show');
             Route::put('/profile', 'update');
         });
-        
-        Route::apiResource('history', HistoryController::class)->only(['index']);
 
         Route::prefix('charts')->group(function() {
             Route::apiResource('/muscle-proportions', MuscleProportionsController::class)->only(['index']);
