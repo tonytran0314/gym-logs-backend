@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\v1\ExerciseController;
 use App\Http\Controllers\Api\v1\ProfileController;
 use App\Http\Controllers\Api\v1\Charts\MuscleProportionsController;
+use App\Http\Controllers\Api\v1\Charts\WeightLevelsController;
 use App\Http\Controllers\Api\v1\HistoryController;
 use App\Http\Controllers\Api\v1\Stats\MostPopularExerciseAnalysisController;
 use App\Http\Controllers\Api\v1\Stats\TotalExercisesThisWeekController;
@@ -28,13 +29,12 @@ Route::prefix('v1')->group(function() {
             Route::get('/profile', 'show');
             Route::put('/profile', 'update');
         });
-
-        // Route::controller(ChartController::class)->prefix('chart')->group(function() {
-        //     Route::get('/weight-level/{selectedExercise?}/{months?}', 'weightLevel');
-        // });
+        
+        Route::apiResource('history', HistoryController::class)->only(['index']);
 
         Route::prefix('charts')->group(function() {
             Route::apiResource('/muscle-proportions', MuscleProportionsController::class)->only(['index']);
+            Route::apiResource('/weight-levels', WeightLevelsController::class)->only(['index']);
         });
         
         Route::prefix('stats')->group(function() {
@@ -43,8 +43,6 @@ Route::prefix('v1')->group(function() {
             Route::apiResource('/most-popular-exercise-analysis', MostPopularExerciseAnalysisController::class)->only(['index']);
             Route::apiResource('/total-exercise-this-week', TotalExercisesThisWeekController::class)->only(['index']);
         });
-
-        Route::apiResource('history', HistoryController::class)->only(['index']);
     });
 
     Route::controller(AuthController::class)->group(function() {

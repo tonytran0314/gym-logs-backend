@@ -1,19 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\Api\v1\Charts;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExerciseRecords;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Models\Exercise;
+use App\Traits\HttpResponses;
+use Illuminate\Http\Request;
 
-class ChartController extends Controller
+class WeightLevelsController extends Controller
 {
-    public function weightLevel($selectedExercise = null, $months = 1) {
+    use HttpResponses;
+
+    public function index(Request $request) {
         $userID = Auth::user()->id;
+
+        $selectedExercise = $request->exercise;
+        $months = $request->periodInMonths;
 
         // Xác định ngày bắt đầu (tính từ hôm nay trừ đi số tháng)
         $startDate = Carbon::now()->subMonths($months)->startOfDay();
@@ -107,7 +112,7 @@ class ChartController extends Controller
         $dates = array_column($weightData, 'date');
         $weightLevels = array_column($weightData, 'weight_level');
 
-        return response()->json([
+        return $this->success([
             'dates' => $dates,
             'weight_levels' => $weightLevels,
             'exercises' => $exerciseList, // Danh sách bài tập (ID và tên)
@@ -120,6 +125,6 @@ class ChartController extends Controller
                 ['label' => '2 months', 'value' => 2],
                 ['label' => '3 months', 'value' => 3],
             ]
-        ]);
+        ], null);
     }
 }
