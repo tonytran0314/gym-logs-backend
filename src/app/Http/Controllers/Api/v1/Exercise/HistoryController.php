@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\Api\v1\Exercise;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExerciseRecords;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Exercise;
 use App\Models\Muscle;
