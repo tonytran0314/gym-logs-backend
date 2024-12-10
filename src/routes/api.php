@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\v1\ProfileController;
 use App\Http\Controllers\Api\v1\ChartController;
 use App\Http\Controllers\Api\v1\ArchivementController;
 use App\Http\Controllers\Api\v1\HistoryController;
+use App\Http\Controllers\Api\v1\Stats\MostPopularExerciseAnalysisController;
 use App\Http\Controllers\Api\v1\Stats\WorkoutDaysController;
 
 Route::prefix('v1')->group(function() {
@@ -47,6 +48,7 @@ Route::prefix('v1')->group(function() {
         Route::prefix('stats')->group(function() {
             Route::apiResource('/streak', StreakController::class)->only(['index']);
             Route::apiResource('/workout-days', WorkoutDaysController::class)->only(['index']);
+            Route::apiResource('/most-popular-exercise-analysis', MostPopularExerciseAnalysisController::class)->only(['index']);
         });
 
         Route::controller(ArchivementController::class)->prefix('archivement')->group(function() {
