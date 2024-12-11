@@ -25,6 +25,10 @@ class MuscleProportionsController extends Controller
 
         $muscleNames = $muscleGroups->pluck('muscle_name');
         $counts = $muscleGroups->pluck('count');
+
+        if(count($muscleNames) === 0 || count($counts) === 0) {
+            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
+        }
         
         return $this->success([
             'muscle_groups' => $muscleNames,
