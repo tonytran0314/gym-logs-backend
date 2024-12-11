@@ -3,6 +3,7 @@
 namespace App\Http\Requests\v1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 
 class WeightLevelsChartRequest extends FormRequest
 {
@@ -22,7 +23,7 @@ class WeightLevelsChartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'exercise' => ['required', 'integer', 'exists:exercises,id'],
+            'exercise' => ['exists:exercises,id'],
             'periodInMonths' => ['required', 'integer', 'gt:0', 'lt:100']
         ];
     }
