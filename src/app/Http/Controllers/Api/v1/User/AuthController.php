@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\v1\LoginRequest;
 use App\Http\Requests\v1\SignupRequest;
 use App\Models\User;
+use App\Traits\HttpResponses;
 
 class AuthController extends Controller
 {
+
+    use HttpResponses;
+
     public function login(LoginRequest $request) {
         $credentials = $request->validated();
 
@@ -18,13 +22,9 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
             
-            return response()->json([
-                'message' => 'Login successful!',
-            ], 200);
+            return $this->success(null, 'Login successful!');
         } else {
-            return response()->json([
-                'message' => 'Invalid login credentials!',
-            ], 401);
+            return $this->error(null, 'Login successful!', 401);
         }
     }
 
@@ -35,37 +35,18 @@ class AuthController extends Controller
     
         $request->session()->regenerateToken();
 
-        return response()->json([
-            'message' => 'Successfully logged out!',
-        ]);
+        return $this->success(null, 'Successfully logged out!');
     }
 
     public function signup(SignupRequest $request) {
-
         $record = $request->all();
 
         $newUser = User::create($record);
 
         if($newUser) {
-            return response()->json([
-                'message' => 'User created successfully.',
-            ], 200);
+            return $this->success(null, 'User created successfully');
         }
 
-        return response()->json([
-            'message' => 'Failed to create user',
-        ], 500);
-    }
-
-    public function isAuthenticated() {
-        if (Auth::check()) {
-            return response()->json([
-                'isAuthenticated' => true,
-            ]); 
-        }
-
-        return response()->json([
-            'isAuthenticated' => false,
-        ]); 
+        return $this->error(null, 'Failed to create user', 500);
     }
 }

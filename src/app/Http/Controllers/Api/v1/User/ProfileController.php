@@ -25,7 +25,6 @@ class ProfileController extends Controller
             return $this->error(null, 'User Not Found', 404);
         }
 
-
         $updated = $user->update([
             'name' => $request->name,
             'email' => $request->email
