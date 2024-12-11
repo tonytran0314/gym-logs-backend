@@ -26,11 +26,8 @@ class StreakController extends Controller
             ->toArray();
 
         // Nếu không có dữ liệu, trả về streak là 0 và danh sách rỗng
-        if (empty($dates)) {
-            return [
-                'current_streak' => 0,
-                'current_streak_dates' => [],
-            ];
+        if (count($dates) === 0) {
+            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
         }
 
         // Khởi tạo biến tính streak và danh sách ngày liên tục

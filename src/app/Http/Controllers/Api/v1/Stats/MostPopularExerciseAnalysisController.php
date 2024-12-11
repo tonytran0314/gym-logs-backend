@@ -24,9 +24,7 @@ class MostPopularExerciseAnalysisController extends Controller
 
         // Nếu không có bài tập nào, trả về thông báo
         if (!$mostPopularExercise) {
-            return response()->json([
-                'message' => 'No exercises found for this user.',
-            ]);
+            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
         }
 
         $exerciseName = Exercise::find($mostPopularExercise->exercise_id)->name;
@@ -41,9 +39,7 @@ class MostPopularExerciseAnalysisController extends Controller
 
         // Nếu không có đủ 2 ngày tập luyện, trả về thông báo
         if ($dates->count() < 2) {
-            return response()->json([
-                'message' => 'Not enough data to compare.',
-            ]);
+            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
         }
 
         // Bước 3: So sánh 2 ngày tập luyện gần nhất
@@ -51,7 +47,11 @@ class MostPopularExerciseAnalysisController extends Controller
         $secondDay = $dates->last();  // Ngày trước đó
 
         // So sánh reps hoặc weight
-        $comparisonResult = [];
+        $comparisonResult = [
+            'direction' => 'increase',
+            'value' => 0,
+            'metric' => 'reps',
+        ];
         $direction = null;
         $valueChange = null;
 
@@ -66,13 +66,13 @@ class MostPopularExerciseAnalysisController extends Controller
             ];
         }
         // Nếu reps không thay đổi, so sánh weight
-        elseif ($firstDay->weight_level != $secondDay->weight_level) {
+        else if ($firstDay->weight_level != $secondDay->weight_level) {
             $direction = $firstDay->weight_level > $secondDay->weight_level ? 'increase' : 'decrease';
             $valueChange = abs($firstDay->weight_level - $secondDay->weight_level);
             $comparisonResult = [
                 'direction' => $direction,
                 'value' => $valueChange,
-                'metric' => 'weight_level',
+                'metric' => 'pounds',
             ];
         }
 
