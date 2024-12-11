@@ -45,14 +45,9 @@ class WeightLevelsController extends Controller
             return $count >= 2;
         })->keys()->toArray();
 
-        // Nếu không có bài tập nào đủ điều kiện, trả về mảng rỗng
-        if (empty($exercises)) {
-            return response()->json([
-                'dates' => [],
-                'weight_levels' => [],
-                'exercises' => [],
-                'error' => 'No exercises meet the criteria.',
-            ]);
+        
+        if (count($exercises) === 0) {
+            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
         }
 
         // Lấy danh sách bài tập (id và name)
@@ -78,12 +73,7 @@ class WeightLevelsController extends Controller
 
         // Nếu không có bài tập hợp lệ, trả về lỗi
         if (!$exercise) {
-            return response()->json([
-                'dates' => [],
-                'weight_levels' => [],
-                'exercises' => [],
-                'error' => 'No valid exercise available.',
-            ]);
+            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
         }
 
         // Lấy tên bài tập
