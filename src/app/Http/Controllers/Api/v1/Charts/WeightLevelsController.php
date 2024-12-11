@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Charts;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\WeightLevelsChartRequest;
 use App\Models\ExerciseRecords;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -14,7 +15,7 @@ class WeightLevelsController extends Controller
 {
     use HttpResponses;
 
-    public function index(Request $request) {
+    public function index(WeightLevelsChartRequest $request) {
         $userID = Auth::user()->id;
 
         $selectedExercise = $request->exercise;
@@ -28,6 +29,10 @@ class WeightLevelsController extends Controller
                     ->where('user_id', $userID)
                     ->where('created_at', '>=', $startDate)
                     ->get();
+        
+        if (count($records) === 0) {
+            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
+        }
 
         // Nhóm các bài tập theo tên và ngày tập luyện (loại bỏ giờ phút)
         $exerciseDays = $records->groupBy(function ($record) {
@@ -44,11 +49,6 @@ class WeightLevelsController extends Controller
         $exercises = $exerciseCount->filter(function ($count) {
             return $count >= 2;
         })->keys()->toArray();
-
-        
-        if (count($exercises) === 0) {
-            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
-        }
 
         // Lấy danh sách bài tập (id và name)
         $exerciseList = Exercise::whereIn('id', $exercises)
