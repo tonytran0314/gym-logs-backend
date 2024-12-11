@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Exercise;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\StoreSetRequest;
 use App\Models\ExerciseRecords;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class SetController extends Controller
 {
     use HttpResponses;
 
-    public function store(Request $request) {
+    public function store(StoreSetRequest $request) {
         // Dùng cái trượt chọn số giống Apple để không cần validation
 
         $userID = Auth::user()->id;
