@@ -22,8 +22,8 @@ class WeightLevelsChartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'exercise' => ['required', 'integer'],
-            'periodInMonths' => ['required', 'integer']
+            'exercise' => ['required', 'integer', 'exists:exercises,id'],
+            'periodInMonths' => ['required', 'integer', 'gt:0', 'lt:100']
         ];
     }
 }

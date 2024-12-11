@@ -22,7 +22,7 @@ class CurrentExerciseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'exercise_id' => ['required', 'integer']
+            'exercise_id' => ['required', 'integer', 'exists:exercises,id']
         ];
     }
 }
