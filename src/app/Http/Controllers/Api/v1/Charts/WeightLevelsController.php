@@ -83,21 +83,21 @@ class WeightLevelsController extends Controller
         $data = $records->where('exercise_id', $exercise);
 
         $weightData = $data
-                        ->groupBy(function ($record) {
-                            return Carbon::parse($record['created_at'])->format('Y-m-d');
-                        })
-                        ->map(function ($recordsByDay) {
-                            $totalWeight = $recordsByDay->sum(function ($record) {
-                                return $record['reps'] * $record['weight_level'];
-                            });
+            ->groupBy(function ($record) {
+                return Carbon::parse($record['created_at'])->format('Y-m-d');
+            })
+            ->map(function ($recordsByDay) {
+                $totalWeight = $recordsByDay->sum(function ($record) {
+                    return $record['reps'] * $record['weight_level'];
+                });
 
-                            return [
-                                'date' => $recordsByDay->first()['created_at']->format('Y-m-d'),
-                                'weight_level' => $totalWeight,
-                            ];
-                        })
-                        ->values()
-                        ->toArray();
+                return [
+                    'date' => Carbon::parse($recordsByDay->first()['created_at'])->format('M d'),
+                    'weight_level' => $totalWeight,
+                ];
+            })
+            ->values()
+            ->toArray();
 
         $dates = array_column($weightData, 'date');
         $weightLevels = array_column($weightData, 'weight_level');

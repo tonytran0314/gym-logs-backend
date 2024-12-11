@@ -24,7 +24,7 @@ class AuthController extends Controller
             
             return $this->success(null, 'Login successful!');
         } else {
-            return $this->error(null, 'Login successful!', 401);
+            return $this->error(null, 'Wrong email or password.', 401);
         }
     }
 
@@ -48,5 +48,17 @@ class AuthController extends Controller
         }
 
         return $this->error(null, 'Failed to create user', 500);
+    }
+
+    public function isAuthenticated() {
+        if (Auth::check()) {
+            return response()->json([
+                'isAuthenticated' => true,
+            ]); 
+        }
+
+        return response()->json([
+            'isAuthenticated' => false,
+        ]); 
     }
 }
