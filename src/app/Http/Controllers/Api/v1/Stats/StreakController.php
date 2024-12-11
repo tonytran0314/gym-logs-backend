@@ -27,7 +27,7 @@ class StreakController extends Controller
 
         // Nếu không có dữ liệu, trả về streak là 0 và danh sách rỗng
         if (count($dates) === 0) {
-            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
+            return $this->success(0, null);
         }
 
         // Khởi tạo biến tính streak và danh sách ngày liên tục
