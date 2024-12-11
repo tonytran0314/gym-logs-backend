@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Exercise;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\CurrentExerciseRequest;
 use Illuminate\Http\Request;
 use App\Models\Exercise;
 use Carbon\Carbon;
@@ -14,7 +15,7 @@ class CurrentExerciseController extends Controller
 {
     use HttpResponses;
 
-    public function index(Request $request) {
+    public function index(CurrentExerciseRequest $request) {
         $today = Carbon::today();
         $userID = Auth::user()->id;
         $exerciseID = $request->exercise_id;

@@ -4,7 +4,7 @@ namespace App\Http\Requests\v1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class WeightLevelsChartRequest extends FormRequest
+class CurrentExerciseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class WeightLevelsChartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'exercise' => ['required', 'integer'],
-            'periodInMonths' => ['required', 'integer']
+            'exercise_id' => ['required', 'integer']
         ];
     }
 }
