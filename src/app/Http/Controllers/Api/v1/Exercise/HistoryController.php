@@ -18,6 +18,10 @@ class HistoryController extends Controller
     public function index() {
         $userID = Auth::user()->id;
         $records = ExerciseRecords::where('user_id', $userID)->orderByDesc('created_at')->get();
+        
+        if(count($records) === 0) {
+            return $this->success(null, 'The workout days history is currently empty. Please start working out');
+        }
 
         // Nhóm dữ liệu theo ngày
         $groupedRecords = $records->groupBy(function ($item) {
