@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api\v1\Exercise;
 
 use App\Http\Controllers\Controller;
@@ -11,25 +10,27 @@ use App\Traits\HttpResponses;
 
 class HistoryController extends Controller
 {
-
     use HttpResponses;
-
-    // This should have pagination
+   
     public function index() {
         $userID = Auth::user()->id;
-        $records = ExerciseRecords::where('user_id', $userID)->orderByDesc('created_at')->get();
-        
-        if(count($records) === 0) {
+    
+        $records = ExerciseRecords::where('user_id', $userID)
+            ->orderByDesc('created_at')
+            ->get();
+    
+        // Check if there are any records
+        if ($records->isEmpty()) {
             return $this->success(null, 'The workout days history is currently empty. Please start working out');
         }
-
-        // Nhóm dữ liệu theo ngày
+    
+        // Group records by date
         $groupedRecords = $records->groupBy(function ($item) {
-            return $item->created_at->format('D, M d');  // Định dạng ngày thành Nov 20, 2024
+            return $item->created_at->format('D, M d'); // Group by day (e.g., "Tue, Dec 19")
         });
-
-        // Biến đổi dữ liệu thành cấu trúc phù hợp với yêu cầu
-        $workouts = $groupedRecords->map(function ($workoutRecords, $date) {
+    
+        // Convert the grouped records to a paginated array of workout days
+        $workoutDays = $groupedRecords->map(function ($workoutRecords, $date) {
             $exercises = $workoutRecords->groupBy('exercise_id')->map(function ($exerciseRecords) {
                 return [
                     'name' => Exercise::find($exerciseRecords->first()->exercise_id)->name,
@@ -43,7 +44,7 @@ class HistoryController extends Controller
                     }),
                 ];
             });
-
+    
             return [
                 'time' => [
                     'day' => $workoutRecords->first()->created_at->format('D'),
@@ -53,7 +54,30 @@ class HistoryController extends Controller
                 'exercises' => $exercises->values(),
             ];
         });
-
-        return $this->success($workouts->values(), null);
-    }
+    
+        // Paginate the workout days (after grouping by date)
+        $perPage = 5; // Set the number of workout days per page
+        $currentPage = (int) request()->get('page', 1); // Get the current page as an integer
+        $totalPages = (int) ceil($workoutDays->count() / $perPage); // Total pages as an integer
+    
+        // Slice the workout days to get the current page of results
+        $paginatedWorkouts = $workoutDays->slice(($currentPage - 1) * $perPage, $perPage);
+    
+        // Get the previous and next page numbers
+        $previousPage = $currentPage > 1 ? (int) $currentPage - 1 : null; // Convert to integer
+        $nextPage = $currentPage < $totalPages ? (int) $currentPage + 1 : null; // Convert to integer
+    
+        // Return paginated data with page numbers
+        $paginatedData = [
+            'list' => $paginatedWorkouts->values(),
+            'pagination' => [
+                'previous_page' => $previousPage,
+                'current_page' => $currentPage,
+                'next_page' => $nextPage,
+                'total_pages' => $totalPages
+            ],
+        ];
+    
+        return $this->success($paginatedData, null);
+    }    
 }
