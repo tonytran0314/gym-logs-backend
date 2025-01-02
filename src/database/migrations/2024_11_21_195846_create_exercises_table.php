@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('muscle_id')->constrained();
-            $table->string('image')->nullable();
-            $table->text('instructions')->nullable();
+            // $table->string('image')->nullable();
+            // $table->text('instructions')->nullable();
         });
     }
 
