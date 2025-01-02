@@ -7,6 +7,7 @@ use App\Models\ExerciseRecords;
 use App\Models\Exercise;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class MostPopularExerciseAnalysisController extends Controller
 {
@@ -14,8 +15,13 @@ class MostPopularExerciseAnalysisController extends Controller
 
     public function index() {
         $userID = Auth::user()->id;
+
+        // Lấy ngày hôm nay
+        $today = Carbon::today();
+
         // Bước 1: Lấy bài tập phổ biến nhất (tính số lần xuất hiện của từng bài tập)
         $mostPopularExercise = ExerciseRecords::where('user_id', $userID)
+            ->where('created_at', '<=', $today) // Lọc các bản ghi trước hoặc hôm nay
             ->select('exercise_id')
             ->groupBy('exercise_id')  // Nhóm theo 'exercise'
             ->selectRaw('count(*) as exercise_count')  // Đếm số lần xuất hiện của mỗi bài tập
@@ -32,6 +38,7 @@ class MostPopularExerciseAnalysisController extends Controller
         // Bước 2: Lấy hai ngày tập luyện gần nhất của bài tập phổ biến
         $dates = ExerciseRecords::where('user_id', $userID)
             ->where('exercise_id', $mostPopularExercise->exercise_id)  // Sử dụng 'exercise' để lọc bài tập
+            ->where('created_at', '<=', $today)  // Lọc các bản ghi trước hoặc hôm nay
             ->select('created_at', 'reps', 'weight_level')
             ->orderByDesc('created_at')
             ->limit(2)

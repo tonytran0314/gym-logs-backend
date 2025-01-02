@@ -23,11 +23,12 @@ class WeightLevelsController extends Controller
 
         // Xác định ngày bắt đầu (tính từ hôm nay trừ đi số tháng)
         $startDate = Carbon::now()->subMonths($months)->startOfDay();
+        $today = Carbon::today(); // Lấy ngày hôm nay
 
         // Lọc các bản ghi theo user_id và created_at trong khoảng thời gian đã chọn, bao gồm bài tập
         $records = ExerciseRecords::with('exercise') // Eager load exercise
                     ->where('user_id', $userID)
-                    ->where('created_at', '>=', $startDate)
+                    ->whereBetween('created_at', [$startDate, $today]) // Lọc từ ngày bắt đầu đến hôm nay
                     ->get();
         
         if (count($records) === 0) {

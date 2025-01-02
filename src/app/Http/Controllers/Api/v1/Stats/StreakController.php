@@ -11,12 +11,16 @@ use Carbon\Carbon;
 
 class StreakController extends Controller
 {
-
     use HttpResponses;
 
     public function index() {
         $userID = Auth::user()->id;
+
+        // Lấy ngày hôm nay
+        $today = Carbon::today();
+
         $dates = ExerciseRecords::where('user_id', $userID)
+            ->where('created_at', '<=', $today) // Lọc các bản ghi trước hoặc hôm nay
             ->select('created_at')
             ->distinct()
             ->orderBy('created_at', 'desc')

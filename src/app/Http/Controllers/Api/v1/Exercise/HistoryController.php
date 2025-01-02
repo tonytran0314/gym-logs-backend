@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Exercise;
 use App\Models\Muscle;
 use App\Traits\HttpResponses;
+use Carbon\Carbon;
 
 class HistoryController extends Controller
 {
@@ -14,22 +15,27 @@ class HistoryController extends Controller
    
     public function index() {
         $userID = Auth::user()->id;
-    
+        
+        // Lấy ngày hôm nay
+        $today = Carbon::today();
+
+        // Lọc các bản ghi trong khoảng thời gian từ hôm nay trở về trước
         $records = ExerciseRecords::where('user_id', $userID)
+            ->where('created_at', '<=', $today) // Điều kiện ngày
             ->orderByDesc('created_at')
             ->get();
     
-        // Check if there are any records
+        // Kiểm tra xem có bản ghi nào không
         if ($records->isEmpty()) {
             return $this->success(null, 'The workout days history is currently empty. Please start working out');
         }
     
-        // Group records by date
+        // Nhóm các bản ghi theo ngày
         $groupedRecords = $records->groupBy(function ($item) {
-            return $item->created_at->format('D, M d'); // Group by day (e.g., "Tue, Dec 19")
+            return $item->created_at->format('D, M d'); // Nhóm theo ngày (ví dụ: "Tue, Dec 19")
         });
     
-        // Convert the grouped records to a paginated array of workout days
+        // Chuyển các bản ghi nhóm thành danh sách các ngày tập luyện
         $workoutDays = $groupedRecords->map(function ($workoutRecords, $date) {
             $exercises = $workoutRecords->groupBy('exercise_id')->map(function ($exerciseRecords) {
                 return [
@@ -55,19 +61,19 @@ class HistoryController extends Controller
             ];
         });
     
-        // Paginate the workout days (after grouping by date)
-        $perPage = 5; // Set the number of workout days per page
-        $currentPage = (int) request()->get('page', 1); // Get the current page as an integer
-        $totalPages = (int) ceil($workoutDays->count() / $perPage); // Total pages as an integer
+        // Phân trang các ngày tập luyện (sau khi nhóm theo ngày)
+        $perPage = 5; // Số ngày tập luyện mỗi trang
+        $currentPage = (int) request()->get('page', 1); // Lấy số trang hiện tại
+        $totalPages = (int) ceil($workoutDays->count() / $perPage); // Tổng số trang
     
-        // Slice the workout days to get the current page of results
+        // Cắt dữ liệu để lấy kết quả của trang hiện tại
         $paginatedWorkouts = $workoutDays->slice(($currentPage - 1) * $perPage, $perPage);
     
-        // Get the previous and next page numbers
-        $previousPage = $currentPage > 1 ? (int) $currentPage - 1 : null; // Convert to integer
-        $nextPage = $currentPage < $totalPages ? (int) $currentPage + 1 : null; // Convert to integer
+        // Lấy số trang trước và trang sau
+        $previousPage = $currentPage > 1 ? (int) $currentPage - 1 : null; // Chuyển thành số nguyên
+        $nextPage = $currentPage < $totalPages ? (int) $currentPage + 1 : null; // Chuyển thành số nguyên
     
-        // Return paginated data with page numbers
+        // Trả về dữ liệu phân trang cùng với các số trang
         $paginatedData = [
             'list' => $paginatedWorkouts->values(),
             'pagination' => [

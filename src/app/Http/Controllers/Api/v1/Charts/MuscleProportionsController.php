@@ -7,6 +7,7 @@ use App\Models\ExerciseRecords;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class MuscleProportionsController extends Controller
 {
@@ -15,9 +16,13 @@ class MuscleProportionsController extends Controller
     public function index() {
         $userID = Auth::user()->id;
 
+        // Lấy ngày hôm nay
+        $today = Carbon::today();
+
         $muscleGroups = ExerciseRecords::select('muscles.name as muscle_name', DB::raw('count(*) as count'))
             ->join('muscles', 'exercise_records.muscle_id', '=', 'muscles.id')
             ->where('exercise_records.user_id', $userID)
+            ->whereDate('exercise_records.created_at', '<=', $today) // Lọc các records từ hôm nay trở về trước
             ->groupBy('exercise_records.muscle_id', 'muscles.name')
             ->orderByDesc('count')
             ->limit(5)
