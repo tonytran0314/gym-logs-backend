@@ -17,7 +17,9 @@ class ExerciseRecords extends Model
         'exercise_id',
         'weight_level',
         'reps',
-        'set_number'
+        'set_number',
+        'created_at',
+        'updated_at'
     ];
 
     public function user(): BelongsTo {

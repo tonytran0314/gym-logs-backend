@@ -20,6 +20,7 @@ class SetController extends Controller
         $userID = Auth::user()->id;
 
         $set = $request->all();
+        $now = Carbon::now();
     
         // Looking for the previous set (the same user, the same date, the same exercise), then the set number + 1. 
         // If cannot find the prev set, means this is the first set => set number = 1
@@ -27,7 +28,7 @@ class SetController extends Controller
                                                 ['user_id', $userID],
                                                 ['exercise_id', $set['exercise_id']]
                                             ])
-                                            ->whereDate('created_at', Carbon::today())
+                                            ->whereDate('created_at', Carbon::now())
                                             ->get();
 
         // ex: finished 3 sets, the array return 3 elements (length = 3)
@@ -36,6 +37,8 @@ class SetController extends Controller
         
         $set['set_number'] = $currentSetNumber;
         $set['user_id'] = $userID;
+        $set['created_at'] = $now;
+        $set['updated_at'] = $now;
 
         $newSet = ExerciseRecords::create($set); 
 

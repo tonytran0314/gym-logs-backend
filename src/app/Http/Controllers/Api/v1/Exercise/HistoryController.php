@@ -16,8 +16,7 @@ class HistoryController extends Controller
     public function index() {
         $userID = Auth::user()->id;
         
-        // Lấy ngày hôm nay
-        $today = Carbon::today();
+        $today = Carbon::now();
 
         // Lọc các bản ghi trong khoảng thời gian từ hôm nay trở về trước
         $records = ExerciseRecords::where('user_id', $userID)
