@@ -19,25 +19,30 @@ class MuscleProportionsController extends Controller
         // Lấy ngày hôm nay
         $today = Carbon::today();
 
-        $muscleGroups = ExerciseRecords::select('muscles.name as muscle_name', DB::raw('count(*) as count'))
+        $muscleGroups = ExerciseRecords::select(
+            'muscles.name as muscle_name', 
+            DB::raw('count(*) as count'),
+            DB::raw('(count(*) * 100.0 / (SELECT count(*) FROM exercise_records WHERE user_id = ' . $userID . ' AND DATE(created_at) <= "' . $today . '")) as percentage')
+        )
             ->join('muscles', 'exercise_records.muscle_id', '=', 'muscles.id')
             ->where('exercise_records.user_id', $userID)
-            ->whereDate('exercise_records.created_at', '<=', $today) // Lọc các records từ hôm nay trở về trước
+            ->whereDate('exercise_records.created_at', '<=', $today)
             ->groupBy('exercise_records.muscle_id', 'muscles.name')
             ->orderByDesc('count')
             ->limit(5)
             ->get();
 
-        $muscleNames = $muscleGroups->pluck('muscle_name');
-        $counts = $muscleGroups->pluck('count');
-
-        if(count($muscleNames) < 2 || count($counts) < 2) {
+        if($muscleGroups->count() < 2) {
             return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
         }
+
+        $formattedData = $muscleGroups->map(function($item) {
+            return [
+                'name' => $item->muscle_name,
+                'total' => round($item->percentage, 1) // Round to 1 decimal place
+            ];
+        });
         
-        return $this->success([
-            'muscle_groups' => $muscleNames,
-            'counts' => $counts,
-        ], null);
+        return $this->success($formattedData, null);
     }
 }
