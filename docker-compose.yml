@@ -22,6 +22,11 @@ services:
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+  # adminer:
+  #   image: adminer
+  #   restart: unless-stopped
+  #   ports:
+  #     - '8080:8080'
   php:
     build:
       context: .
@@ -30,11 +35,11 @@ services:
       - './src:/var/www/html'
     ports:
       - '9000:9000'
-  composer:
-    image: composer
-    volumes:
-      - './src:/var/www/html'
-    working_dir: /var/www/html
+  # composer:
+  #   image: composer
+  #   volumes:
+  #     - './src:/var/www/html'
+  #   working_dir: /var/www/html
   npm:
     image: node:alpine # use alpine version
     volumes:
