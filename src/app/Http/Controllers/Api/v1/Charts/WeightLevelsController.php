@@ -83,7 +83,7 @@ class WeightLevelsController extends Controller
         // Tiếp tục xử lý dữ liệu
         $data = $records->where('exercise_id', $exercise);
 
-        $weightData = $data
+        $chartData = $data
             ->groupBy(function ($record) {
                 return Carbon::parse($record['created_at'])->format('Y-m-d');
             })
@@ -93,28 +93,26 @@ class WeightLevelsController extends Controller
                 });
 
                 return [
-                    'date' => Carbon::parse($recordsByDay->first()['created_at'])->format('M d'),
-                    'weight_level' => $totalWeight,
+                    'dates' => Carbon::parse($recordsByDay->first()['created_at'])->format('M d'),
+                    'value' => $totalWeight,
                 ];
             })
             ->values()
             ->toArray();
 
-        $dates = array_column($weightData, 'date');
-        $weightLevels = array_column($weightData, 'weight_level');
-
         return $this->success([
-            'dates' => $dates,
-            'weight_levels' => $weightLevels,
+            'data' => $chartData,
             'exercises' => $exerciseList, // Danh sách bài tập (ID và tên)
             'exercise' => [
                 'id' => $exercise,
                 'name' => $exerciseName
             ],
             'periods' => [
-                ['label' => '1 month', 'value' => 1],
-                ['label' => '2 months', 'value' => 2],
-                ['label' => '3 months', 'value' => 3],
+                ['label' => 'Last month', 'value' => 1],
+                ['label' => 'Last 2 months', 'value' => 2],
+                ['label' => 'Last 3 months', 'value' => 3],
+                ['label' => 'Last 6 months', 'value' => 6],
+                ['label' => 'Last year', 'value' => 12],
             ]
         ], null);
     }
