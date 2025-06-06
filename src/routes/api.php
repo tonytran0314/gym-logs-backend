@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\Api\v1\Charts\MuscleProportionsController;
 use App\Http\Controllers\Api\v1\Charts\WeightLevelsController;
@@ -18,6 +19,8 @@ use App\Http\Controllers\Api\v1\Stats\MostPopularExerciseAnalysisController;
 use App\Http\Controllers\Api\v1\Stats\StreakController;
 use App\Http\Controllers\Api\v1\Stats\TotalExercisesThisWeekController;
 use App\Http\Controllers\Api\v1\Stats\WorkoutDaysController;
+
+use App\Http\Controllers\Api\v1\Exercise\RecentWorkoutController;
 
 Route::prefix('v1')->group(function() {
     Route::middleware('auth:sanctum')->group(function() {
@@ -43,6 +46,8 @@ Route::prefix('v1')->group(function() {
             Route::apiResource('/most-popular-exercise-analysis', MostPopularExerciseAnalysisController::class)->only(['index']);
             Route::apiResource('/total-exercise-this-week', TotalExercisesThisWeekController::class)->only(['index']);
         });
+
+        Route::get('/recent-workouts', [RecentWorkoutController::class, 'index']);
     });
 
     Route::controller(AuthController::class)->group(function() {
