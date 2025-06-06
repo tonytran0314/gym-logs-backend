@@ -61,7 +61,7 @@ class HistoryController extends Controller
         });
     
         // Phân trang các ngày tập luyện (sau khi nhóm theo ngày)
-        $perPage = 5; // Số ngày tập luyện mỗi trang
+        $perPage = 8; // Số ngày tập luyện mỗi trang
         $currentPage = (int) request()->get('page', 1); // Lấy số trang hiện tại
         $totalPages = (int) ceil($workoutDays->count() / $perPage); // Tổng số trang
     
