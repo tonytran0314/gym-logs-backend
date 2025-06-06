@@ -28,9 +28,16 @@ class MostPopularExerciseAnalysisController extends Controller
             ->orderByDesc('exercise_count')  // Sắp xếp theo số lần xuất hiện, giảm dần
             ->first(); // Lấy bài tập phổ biến nhất
 
-        // Nếu không có bài tập nào, trả về thông báo
+        // Nếu không có bài tập nào, trả về giá trị mặc định
         if (!$mostPopularExercise) {
-            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
+            return $this->success([
+                'exerciseName' => 'Lateral Raise',
+                'comparison' => [
+                    'direction' => 'increase',
+                    'value' => 0,
+                    'metric' => 'lbs'
+                ]
+            ], null);
         }
 
         $exerciseName = Exercise::find($mostPopularExercise->exercise_id)->name;
@@ -44,9 +51,16 @@ class MostPopularExerciseAnalysisController extends Controller
             ->limit(2)
             ->get();
 
-        // Nếu không có đủ 2 ngày tập luyện, trả về thông báo
+        // Nếu không có đủ 2 ngày tập luyện, trả về giá trị mặc định
         if ($dates->count() < 2) {
-            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
+            return $this->success([
+                'exerciseName' => 'Lateral Raise',
+                'comparison' => [
+                    'direction' => 'increase',
+                    'value' => 0,
+                    'metric' => 'lbs'
+                ]
+            ], null);
         }
 
         // Bước 3: So sánh 2 ngày tập luyện gần nhất

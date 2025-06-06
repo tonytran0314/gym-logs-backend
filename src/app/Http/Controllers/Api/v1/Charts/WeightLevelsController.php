@@ -31,8 +31,8 @@ class WeightLevelsController extends Controller
                     ->whereBetween('created_at', [$startDate, $today]) // Lọc từ ngày bắt đầu đến hôm nay
                     ->get();
         
-        if (count($records) === 0) {
-            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
+        if (count($records) < 2) {
+            return $this->success([], 'Not enough data to perform the requested analysis. Please start working out');
         }
 
         // Nhóm các bài tập theo tên và ngày tập luyện (loại bỏ giờ phút)
@@ -74,7 +74,7 @@ class WeightLevelsController extends Controller
 
         // Nếu không có bài tập hợp lệ, trả về lỗi
         if (!$exercise) {
-            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
+            return $this->success([], 'Not enough data to perform the requested analysis. Please start working out');
         }
 
         // Lấy tên bài tập

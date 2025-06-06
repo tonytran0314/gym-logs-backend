@@ -33,7 +33,7 @@ class MuscleProportionsController extends Controller
             ->get();
 
         if($muscleGroups->count() < 2) {
-            return $this->success(null, 'Not enough data to perform the requested analysis. Please start working out');
+            return $this->success([], 'Not enough data to perform the requested analysis. Please start working out');
         }
 
         $formattedData = $muscleGroups->map(function($item) {

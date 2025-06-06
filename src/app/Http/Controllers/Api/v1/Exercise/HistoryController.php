@@ -26,7 +26,7 @@ class HistoryController extends Controller
     
         // Kiểm tra xem có bản ghi nào không
         if ($records->isEmpty()) {
-            return $this->success(null, 'The workout days history is currently empty. Please start working out');
+            return $this->success([], 'The workout days history is currently empty. Please start working out');
         }
     
         // Nhóm các bản ghi theo ngày
